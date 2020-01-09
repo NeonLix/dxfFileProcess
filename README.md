@@ -1,6 +1,6 @@
-- 功能1，格式转换，顺带改名为部件名
+- **功能1**，格式转换，更新文件名
   - dxf -> svg 
-    - svg：xml格式的矢量图，可提取出部件名信息
+    - svg：xml格式的矢量图，根据svg代码可提取出部件名信息
   - dxf -> pdf -> jpg
     - pdf足够清晰，可调整生成jpg的清晰度
 
@@ -13,7 +13,7 @@
 </svg>
 
 ```
-- 功能2，dxf图像切割
+- **功能2**，dxf图像切割
   - dxf -> svg -> svgs
   - 依照svg文件代码结构，将包含多个子图的dxf切割
     1. 观察代码结构，想尽办法分出每个子图的本体代码
@@ -39,7 +39,9 @@
 2. 转换实例dxf：/resources/compPic.dxf 为svg
 3. 分割此svg
 4. svg -> jpg
-   
+
+## public接口说明：
+
 **DXFConver.java**：dxf->svg
 - GetSourceFile(String filePath)
   - 通过filePath路径获取文件，并**转化为DXFDocument**
@@ -50,3 +52,15 @@
   -  读取svg文件中部件名(piece name)并更改文件名
 - DXF2PDF(DXFDocument doc, String fileName)
   - dxf -> pdf
+
+**SVGProcess.java**：封装对SVG的操作，封装SVGConvert.java
+> 封装了根据代码结构切割SVG、查找到代码中的部件名并重命名，计算并重制viewBox使画面正中且完整，补全切割出的代码为完整的SVG文件。
+- SVGDevide(String filePath, String outFilePath)
+- SVG2JPG() 与SVGDevide共用路径
+
+**SVGConvert.java**：svg->pdf->jpg
+- SVGs2JPGs(String filePath, List<String> nameList)，转换并重命名。
+  - pdf放filePath/padImages/中
+  - jpg放filePath/jpgImages/中
+- SVG2JPG(String filePath, String outFilePath, float resolution) 单张图片的转换，可设置清晰度
+  - resolution=25.0f时约1M
