@@ -1,0 +1,9 @@
+*.class
+/.settings
+/.classpath
+/.project
+!/images/resources/template.svg
+/images/CQ*
+/images/jpgImages/
+/images/pdfImages/
+/images/resources/
