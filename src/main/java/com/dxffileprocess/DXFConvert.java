@@ -1,4 +1,4 @@
-package dxfFileProcess;
+package com.dxffileprocess;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -24,13 +24,13 @@ import org.xml.sax.SAXException;
 public class DXFConvert {
 	/**
 	 * @Title: GetSourceFile
-	 * @Description: TODO Í¨¹ýÂ·¾¶»ñÈ¡ÎÄ¼þ£¬²¢×ª»¯ÎªDXFDocument
-	 * @param filePath Ô´ÎÄ¼þÂ·¾¶
+	 * @Description: TODO é€šè¿‡è·¯å¾„èŽ·å–æ–‡ä»¶ï¼Œå¹¶è½¬åŒ–ä¸ºDXFDocument
+	 * @param filePath æºæ–‡ä»¶è·¯å¾„
 	 * @return: DXFDocument
 	 */
 	public static DXFDocument GetSourceFile(String filePath) {
 		Parser dxfParser = ParserBuilder.createDefaultParser();
-		// ÐèÒª×ª»»µÄdxfÎÄ¼þ
+		// éœ€è¦è½¬æ¢çš„dxfæ–‡ä»¶
 		try {
 			dxfParser.parse(new FileInputStream(filePath), "UTF-8");
 		} catch (FileNotFoundException e) {
@@ -45,28 +45,28 @@ public class DXFConvert {
 	/**
 	 * @Title: DXF2SVG
 	 * @Description: TODO DXF -> SVG(XML)
-	 * @param doc         DXFÎÄµµ
-	 * @param outFilePath Êä³öÂ·¾¶
+	 * @param doc         DXFæ–‡æ¡£
+	 * @param outFilePath è¾“å‡ºè·¯å¾„
 	 * @throws FileNotFoundException
 	 * @throws SAXException
 	 * @return: void
 	 */
 	public static void DXF2SVG(DXFDocument doc, String outFilePath) throws FileNotFoundException, SAXException {
 		SAXGenerator generator = new SVGGenerator();
-		// Êä³öxml
+		// è¾“å‡ºxml
 		SAXSerializer out = new SAXXMLSerializer();
 		OutputStream fileOS = new FileOutputStream(outFilePath);
-		// ÉèÖÃÊä³öÂ·¾¶
+		// è®¾ç½®è¾“å‡ºè·¯å¾„
 		out.setOutput(fileOS);
-		// Êä³ö
+		// è¾“å‡º
 		generator.generate(doc, out, new HashMap());
 		System.out.println("DXF to SVG Done");
 	}
 
 	/**
 	 * @Title: ChangeNameToPieceName
-	 * @Description: TODO ÊÊÓÃÓÚµ¥¸öpieceName
-	 * @param filePath svgÎÄ¼þÂ·¾¶
+	 * @Description: TODO é€‚ç”¨äºŽå•ä¸ªpieceName
+	 * @param filePath svgæ–‡ä»¶è·¯å¾„
 	 * @throws FileNotFoundException
 	 * @return: void
 	 */
@@ -81,10 +81,10 @@ public class DXFConvert {
 		String pieceName = "null";
 		if (i > -1)
 			pieceName = str.substring((i + 12), (i + 23));
-		// svgÎÄ¼þÖØÃüÃû
+		// svgæ–‡ä»¶é‡å‘½å
 		File oldF = new File(filePath);
 		if (oldF.exists()) {
-			// ÎÄ¼þÂ·¾¶£ºD:/Projects/Project1_Convert/singlePic.xml
+			// æ–‡ä»¶è·¯å¾„ï¼šD:/Projects/Project1_Convert/singlePic.xml
 			filePath = filePath.substring(0, filePath.lastIndexOf('/') + 1) + pieceName + ".svg";
 			File newF = new File(filePath);
 			oldF.renameTo(newF);
@@ -93,8 +93,8 @@ public class DXFConvert {
 
 	/**
 	 * @Title: DXF2PDF
-	 * @Description: TODO DXF -> PDF£¬Ð§¹ûÇåÎú
-	 * @param doc      DXFÎÄµµ
+	 * @Description: TODO DXF -> PDFï¼Œæ•ˆæžœæ¸…æ™°
+	 * @param doc      DXFæ–‡æ¡£
 	 * @param fileName
 	 * @throws FileNotFoundException
 	 * @throws SAXException
@@ -102,10 +102,10 @@ public class DXFConvert {
 	 */
 	public static void DXF2PDF(DXFDocument doc, String fileName) throws FileNotFoundException, SAXException {
 		SAXGenerator generator = new SVGGenerator();
-		// Êä³öpdf
+		// è¾“å‡ºpdf
 		SAXSerializer out = new SAXPDFSerializer();
-		OutputStream fileOS = new FileOutputStream("D:/Projects/Project1_Convert/" + fileName + ".pdf"); // ÇåÎú
-		// ÉèÖÃÊä³öÂ·¾¶
+		OutputStream fileOS = new FileOutputStream("D:/Projects/Project1_Convert/" + fileName + ".pdf"); // æ¸…æ™°
+		// è®¾ç½®è¾“å‡ºè·¯å¾„
 		out.setOutput(fileOS);
 		generator.generate(doc, out, new HashMap());
 		System.out.println("DXF to PDF Done");

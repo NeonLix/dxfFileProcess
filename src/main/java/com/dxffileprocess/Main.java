@@ -1,4 +1,4 @@
-package dxfFileProcess;
+package com.dxffileprocess;
 
 import java.io.FileNotFoundException;
 
@@ -6,20 +6,20 @@ import org.kabeja.dxf.DXFDocument;
 import org.xml.sax.SAXException;
 
 /*
- * 1¡¢DXF -> SVG (Kabeja)
- * 2¡¢SVG -> svgs 
- * 			¾ÓÖĞ´¦Àí£ºviewBox="¸÷µã"¿´µ½"Õâ¸öSVG»æÍ¼ÇøÓò¡£ÓÉ¿Õ¸ñ»ò¶ººÅ·Ö¸ôµÄ4¸öÖµ¡£(min x, min y, width, height)"
- * 				ÉèÖÃViewBox£¬(×îĞ¡x,  |×î´óy|£¬ ×î´óx-×îĞ¡x£¬×î´óy-×îĞ¡y)
- * 			¶ÁÈ¡xmlÖĞ¼ÇÂ¼µÄPiece Name
- * 			(ÒÔÉÏ´¦ÀíÀûÓÃDOM4J)
- * 3¡¢svg -> pdf (batik),  pdf -> jpg (pdfbox)
+ * 1ã€DXF -> SVG (Kabeja)
+ * 2ã€SVG -> svgs 
+ * 			å±…ä¸­å¤„ç†ï¼šviewBox="å„ç‚¹"çœ‹åˆ°"è¿™ä¸ªSVGç»˜å›¾åŒºåŸŸã€‚ç”±ç©ºæ ¼æˆ–é€—å·åˆ†éš”çš„4ä¸ªå€¼ã€‚(min x, min y, width, height)"
+ * 				è®¾ç½®ViewBoxï¼Œ(æœ€å°x,  |æœ€å¤§y|ï¼Œ æœ€å¤§x-æœ€å°xï¼Œæœ€å¤§y-æœ€å°y)
+ * 			è¯»å–xmlä¸­è®°å½•çš„Piece Name
+ * 			(ä»¥ä¸Šå¤„ç†åˆ©ç”¨DOM4J)
+ * 3ã€svg -> pdf (batik),  pdf -> jpg (pdfbox)
  */
 public class Main {
 
 	public static void main(String[] args) {
-		// »ñÈ¡¹¤³Ì¸ùÄ¿Â¼/image
+		// è·å–å·¥ç¨‹æ ¹ç›®å½•/image
 		String imagePath = System.getProperties().getProperty("user.dir")+"/images";
-		// 1¡¢DXF -> SVG£¨Â·¾¶£º¹¤³ÌÂ·¾¶/images/£©
+		// 1ã€DXF -> SVGï¼ˆè·¯å¾„ï¼šå·¥ç¨‹è·¯å¾„/images/ï¼‰
 		DXFDocument dxfDoc = DXFConvert.GetSourceFile(imagePath+"/resources/compPic.dxf");
 		try {
 			DXFConvert.DXF2SVG(dxfDoc, imagePath+"/resources/compPic.svg");
@@ -28,11 +28,11 @@ public class Main {
 		} catch (SAXException e) {
 			e.printStackTrace();
 		}
-		// 2¡¢SVG -> svgs
+		// 2ã€SVG -> svgs
 		SVGProcess.SVGDevide(imagePath+"/resources/compPic.svg", imagePath);
-		// 3¡¢svgs -> jpgs
+		// 3ã€svgs -> jpgs
 		SVGProcess.SVG2JPG();
-		System.out.println("×ª»»Íê³É£¡");
+		System.out.println("è½¬æ¢å®Œæˆï¼");
 	}
 
 }

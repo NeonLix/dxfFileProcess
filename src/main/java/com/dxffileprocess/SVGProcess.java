@@ -1,4 +1,4 @@
-package dxfFileProcess;
+package com.dxffileprocess;
 
 import org.apache.batik.transcoder.TranscoderException;
 import org.dom4j.Document;
@@ -21,23 +21,23 @@ import java.util.List;
 
 
 public class SVGProcess {
-	// Ä¬ÈÏ´æ·ÅÍ¼Æ¬ÎÄ¼ş¡¢Ä£°åµÄÂ·¾¶
+	// é»˜è®¤å­˜æ”¾å›¾ç‰‡æ–‡ä»¶ã€æ¨¡æ¿çš„è·¯å¾„
 	private static String imagePath;
 //	public static void main(String[] args) {
 //		SVGDevide(imagePath + "/compPic.svg");
 //	}
 	/**
 	 * @Title: SVGDevide   
-	 * @Description: TODO   ½«Ò»¸ö¶àÍ¼µÄSVG°´Í¼·ÖÎªsvg
-	 * @param filePath   SVGÔ´ÎÄ¼şÂ·¾¶
-	 * @param outFilePath   Êä³öÎÄ¼şÂ·¾¶£¨ÎŞ¾ßÌåÎÄ¼ş£¬Ä¬ÈÏ¹¤³ÌÄ¿Â¼/images£©
+	 * @Description: TODO   å°†ä¸€ä¸ªå¤šå›¾çš„SVGæŒ‰å›¾åˆ†ä¸ºsvg
+	 * @param filePath   SVGæºæ–‡ä»¶è·¯å¾„
+	 * @param outFilePath   è¾“å‡ºæ–‡ä»¶è·¯å¾„ï¼ˆæ— å…·ä½“æ–‡ä»¶ï¼Œé»˜è®¤å·¥ç¨‹ç›®å½•/imagesï¼‰
 	 * @return: void
 	 */
 	public static void SVGDevide(String filePath, String outFilePath) {
 		imagePath = outFilePath;
-		// 1.´´½¨Reader¶ÔÏó
+		// 1.åˆ›å»ºReaderå¯¹è±¡
 		SAXReader reader = new SAXReader();
-		// 2.¼ÓÔØxml
+		// 2.åŠ è½½xml
 		Document document;
 		try {
 			document = reader.read(new File(filePath));
@@ -68,7 +68,7 @@ public class SVGProcess {
 	
 	/**
 	 * @Title: GetViewBoxFromPath   
-	 * @Description: TODO   ÀûÓÃpath½ÚµãµÄÊôĞÔdÖĞÊı¾İ£¬¼ÆËã³öviewBox
+	 * @Description: TODO   åˆ©ç”¨pathèŠ‚ç‚¹çš„å±æ€§dä¸­æ•°æ®ï¼Œè®¡ç®—å‡ºviewBox
 	 * @param: pathNode
 	 * @return: String      
 	 * @throws
@@ -77,13 +77,13 @@ public class SVGProcess {
 		if (!pathNode.getName().equals("path"))
 			return null;
 		String posStrs[] = pathNode.attribute("d").getValue().toString().split("\\s");
-		// posStrs¸ñÊ½£ºM -257.9927426804836 -24.15827161102091
-		// Ç°Ò»¸öÊı´æarrayX£¬ºóÒ»¸öÊı´æarrayY
+		// posStrsæ ¼å¼ï¼šM -257.9927426804836 -24.15827161102091
+		// å‰ä¸€ä¸ªæ•°å­˜arrayXï¼Œåä¸€ä¸ªæ•°å­˜arrayY
 		List<Double> listX = new ArrayList<Double>();
 		List<Double> listY = new ArrayList<Double>();
 		boolean flag = true;
 		for (String posStr : posStrs) {
-			if (posStr.length() > 1) // ÅÅ³ıM¡¢LµÈ×Ö·û
+			if (posStr.length() > 1) // æ’é™¤Mã€Lç­‰å­—ç¬¦
 			{
 				if (flag)
 					listX.add(Double.parseDouble(posStr));
@@ -92,21 +92,21 @@ public class SVGProcess {
 				flag = !flag;
 			}
 		}
-		// ĞŞ¸Ä<svg>µÄÊôĞÔViewBox£¬ÒÔ±£Ö¤Í¼Ïñ¾ÓÖĞ
+		// ä¿®æ”¹<svg>çš„å±æ€§ViewBoxï¼Œä»¥ä¿è¯å›¾åƒå±…ä¸­
 		double minX = Collections.min(listX);
 		double maxY = Collections.max(listY);
 		double width = Math.abs(Collections.max(listX) - minX);
 		double height = Math.abs(maxY - Collections.min(listY));
 		maxY = -maxY;
 		// double[] viewBox = {minX, maxY, width, height};
-		// ¿Éµ÷ÕûÍ¼ÏñÎ»ÖÃ¡¢´óĞ¡
+		// å¯è°ƒæ•´å›¾åƒä½ç½®ã€å¤§å°
 		String viewBox = (minX-1) + " " + (maxY-1) + " " + (width+5) + " " + (height+2);
 		return viewBox;
 	}
 
 	/**
 	 * @Title: SetViewBox   
-	 * @Description: TODO  ¸ø³ö´ıÉèÖÃviewBoxÎÄ¼ş£¬¼ÆËã²¢ÉèÖÃviewBox
+	 * @Description: TODO  ç»™å‡ºå¾…è®¾ç½®viewBoxæ–‡ä»¶ï¼Œè®¡ç®—å¹¶è®¾ç½®viewBox
 	 * @param document
 	 * @param filePath
 	 * @throws DocumentException
@@ -117,8 +117,8 @@ public class SVGProcess {
 		Element svgNode = document.getRootElement(); // root -> svg
 		String val = GetViewBoxFromPath(svgNode.element("g").element("g").element("path"));
 		svgNode.attribute("viewBox").setValue(val);
-		// ĞŞ¸ÄÊôĞÔºó£¬ÒªĞ´µ½´ÅÅÌ²ÅÄÜÉúĞ§
-		OutputFormat format = OutputFormat.createPrettyPrint(); // Æ¯ÁÁ¸ñÊ½£ºÓĞ¿Õ¸ñ»»ĞĞ
+		// ä¿®æ”¹å±æ€§åï¼Œè¦å†™åˆ°ç£ç›˜æ‰èƒ½ç”Ÿæ•ˆ
+		OutputFormat format = OutputFormat.createPrettyPrint(); // æ¼‚äº®æ ¼å¼ï¼šæœ‰ç©ºæ ¼æ¢è¡Œ
 		format.setEncoding("UTF-8");
 		FileOutputStream out = new FileOutputStream(filePath);
 		XMLWriter writer = new XMLWriter(out, format);
@@ -127,7 +127,7 @@ public class SVGProcess {
 	}
 
 	/**
-	 * @Title: SetViewBoxWithVB   ÒÑ¾­ÓĞÁËviewBox£¬Ö±½ÓÉèÖÃ
+	 * @Title: SetViewBoxWithVB   å·²ç»æœ‰äº†viewBoxï¼Œç›´æ¥è®¾ç½®
 	 * @Description: TODO   
 	 * @param document
 	 * @param val
@@ -140,8 +140,8 @@ public class SVGProcess {
 			throws DocumentException, IOException {
 		Element svgNode = document.getRootElement(); // root -> svg
 		svgNode.attribute("viewBox").setValue(val);
-		// ĞŞ¸ÄÊôĞÔºó£¬ÒªĞ´µ½´ÅÅÌ²ÅÄÜÉúĞ§
-		OutputFormat format = OutputFormat.createPrettyPrint(); // Æ¯ÁÁ¸ñÊ½£ºÓĞ¿Õ¸ñ»»ĞĞ
+		// ä¿®æ”¹å±æ€§åï¼Œè¦å†™åˆ°ç£ç›˜æ‰èƒ½ç”Ÿæ•ˆ
+		OutputFormat format = OutputFormat.createPrettyPrint(); // æ¼‚äº®æ ¼å¼ï¼šæœ‰ç©ºæ ¼æ¢è¡Œ
 		format.setEncoding("UTF-8");
 		FileOutputStream out = new FileOutputStream(filePath);
 		XMLWriter writer = new XMLWriter(out, format);
@@ -153,15 +153,15 @@ public class SVGProcess {
 	private static List<String> nameList = new ArrayList<String>();
 	/**
 	 * @Title: WriteText   
-	 * @Description: TODO   ½«SVGµÄtext½Úµã·ÖºÃ£¬Ğ´Èë¸÷¸ösvg¡£Í¬Ê±¿É»ñÈ¡svgÊıÄ¿fileCntºÍÃû×ÖnameList
+	 * @Description: TODO   å°†SVGçš„textèŠ‚ç‚¹åˆ†å¥½ï¼Œå†™å…¥å„ä¸ªsvgã€‚åŒæ—¶å¯è·å–svgæ•°ç›®fileCntå’Œåå­—nameList
 	 * @param document
 	 * @throws IOException
 	 * @throws DocumentException      
 	 * @return: void
 	 */
 	private static void WriteText(Document document) throws IOException, DocumentException {
-		File tmpFile = new File(imagePath + "/resources/template.svg"); // »ñÈ¡svgÄ£°å
-		// ÄÃµ½<text>½Úµã
+		File tmpFile = new File(imagePath + "/resources/template.svg"); // è·å–svgæ¨¡æ¿
+		// æ‹¿åˆ°<text>èŠ‚ç‚¹
 		Element svgNode = document.getRootElement(); // root -> svg
 		Element g1Node = svgNode.element("g");
 		Element g2Node = g1Node.element("g");
@@ -169,10 +169,10 @@ public class SVGProcess {
 		for (Iterator<Element> it = g2Node.elementIterator(); it.hasNext();) {
 			Element childNode = it.next();
 			if (childNode.getName() == "text") {
-				if (childNode.element("tspan").getTextTrim().equals("Size: Base")) // ÎÄ¼ş£«1
+				if (childNode.element("tspan").getTextTrim().equals("Size: Base")) // æ–‡ä»¶ï¼‹1
 				{
 					fileCnt++;
-					tmpFilePath = imagePath + "/temp_" + fileCnt + ".svg";  // ÁÙÊ±ÎÄ¼ş
+					tmpFilePath = imagePath + "/temp_" + fileCnt + ".svg";  // ä¸´æ—¶æ–‡ä»¶
 					File target = new File(tmpFilePath);
 					try {
 						Files.copy(tmpFile.toPath(), target.toPath(), StandardCopyOption.REPLACE_EXISTING);
@@ -181,18 +181,18 @@ public class SVGProcess {
 						e.printStackTrace();
 					}
 
-				} else if (childNode.element("tspan").getTextTrim().contains("Piece Name")) // »ñÈ¡ÎÄ¼şÃû
+				} else if (childNode.element("tspan").getTextTrim().contains("Piece Name")) // è·å–æ–‡ä»¶å
 				{
 					String name = childNode.element("tspan").getTextTrim();
 					if (name.contains(":"))
 						nameList.add(childNode.element("tspan").getTextTrim().split(":")[1].trim());
 					else {
-						System.out.println("·ÖÀëÎÄ¼şÃû³ö´í");
+						System.out.println("åˆ†ç¦»æ–‡ä»¶åå‡ºé”™");
 						return;
 					}
 				}
-				// ½«textĞ´Èë¶ÔÓ¦svgÎÄ¼ş
-				// £¨³¢ÊÔÓÃXMLWriter¸ñÊ½»¯£¬»áÊ¹< ±ä³É &lt
+				// å°†textå†™å…¥å¯¹åº”svgæ–‡ä»¶
+				// ï¼ˆå°è¯•ç”¨XMLWriteræ ¼å¼åŒ–ï¼Œä¼šä½¿< å˜æˆ &lt
 				try {
 					FileOutputStream out = new FileOutputStream(tmpFilePath, true);
 					OutputStreamWriter osw = new OutputStreamWriter(out);
@@ -208,15 +208,15 @@ public class SVGProcess {
 
 	/**
 	 * @Title: WriteLine   
-	 * @Description: TODO   ½«SVGµÄline·ÖºÃĞ´Èë¸÷¸ösvg
+	 * @Description: TODO   å°†SVGçš„lineåˆ†å¥½å†™å…¥å„ä¸ªsvg
 	 * @param document
 	 * @throws IOException      
 	 * @return: void
 	 */
 	private static void WriteLine(Document document) throws IOException {
-		// line£¬Ò»Í¼Ò»Ö±Ïß¡£ÈôºóÃæµÄlineÖĞy1 != y2£¬ÄÇÃ´Ò»¶¨¸úÇ°Ò»¸ölineÒ»Æğ
+		// lineï¼Œä¸€å›¾ä¸€ç›´çº¿ã€‚è‹¥åé¢çš„lineä¸­y1 != y2ï¼Œé‚£ä¹ˆä¸€å®šè·Ÿå‰ä¸€ä¸ªlineä¸€èµ·
 		int fileIdx = 0;
-		// »ñÈ¡<line>½Úµã
+		// è·å–<line>èŠ‚ç‚¹
 		Element svgNode = document.getRootElement(); // root -> svg
 		Element g1Node = svgNode.element("g");
 		Element g2Node = g1Node.element("g");
@@ -224,14 +224,14 @@ public class SVGProcess {
 		for (Iterator<Element> it = g2Node.elementIterator(); it.hasNext();) {
 			Element childNode = it.next();
 			if (childNode.getName() == "line") {
-				// Èô y1 ¡Ö y2£¬ËµÃ÷ÊôÓÚĞÂÎÄ¼ş£¬fileIdx++
+				// è‹¥ y1 â‰ˆ y2ï¼Œè¯´æ˜å±äºæ–°æ–‡ä»¶ï¼ŒfileIdx++
 				double y1 = Double.parseDouble(childNode.attributeValue("y1"));
 				double y2 = Double.parseDouble(childNode.attributeValue("y2"));
 				if (Math.abs(y1 - y2) <= 0.1) {
 					fileIdx++;
 					tmpFilePath = imagePath + "/temp_" + fileIdx + ".svg";
 				}
-				// <line>¼ÓÈë¶ÔÓ¦ÎÄµµ
+				// <line>åŠ å…¥å¯¹åº”æ–‡æ¡£
 				FileOutputStream out = new FileOutputStream(tmpFilePath, true);
 				OutputStreamWriter osw = new OutputStreamWriter(out);
 				osw.write(childNode.asXML());
@@ -243,7 +243,7 @@ public class SVGProcess {
 
 	/**
 	 * @Title: EndSVG   
-	 * @Description: TODO   ¸øÃ¿¸öSVG¼ÓÉÏ</g></g></svg>Ê¹Ö®½á¹¹ÍêÕû
+	 * @Description: TODO   ç»™æ¯ä¸ªSVGåŠ ä¸Š</g></g></svg>ä½¿ä¹‹ç»“æ„å®Œæ•´
 	 * @throws IOException      
 	 * @return: void
 	 */
@@ -263,16 +263,16 @@ public class SVGProcess {
 	private static List<String> viewBoxList = new ArrayList<String>();
 	/**
 	 * @Title: WritePath   
-	 * @Description: TODO   ½«SVGµÄpath·ÖºÃĞ´Èë¸÷¸ösvg£¬Í¬Ê±»ñÈ¡¸÷×ÔµÄviewBox
+	 * @Description: TODO   å°†SVGçš„pathåˆ†å¥½å†™å…¥å„ä¸ªsvgï¼ŒåŒæ—¶è·å–å„è‡ªçš„viewBox
 	 * @param document      
 	 * @return: void
 	 */
 	private static void WritePath(Document document) {
-		// Í¨¹ıviewBoxÅĞ¶ÏpathÊÇ²»ÊÇÊôÓÚĞÂÍ¼
-		// °´ÕÕ»æÍ¼¹æ·¶£¬ÏÈ»­ÍâpathÔÙ»­ÄÚpath
-		// ¿ÉÒÔË³±ã°ÑÃ¿¸öÎÄ¼şµÄviewBox¸ÄÁË£¬ºÃ¾ÓÖĞ
+		// é€šè¿‡viewBoxåˆ¤æ–­pathæ˜¯ä¸æ˜¯å±äºæ–°å›¾
+		// æŒ‰ç…§ç»˜å›¾è§„èŒƒï¼Œå…ˆç”»å¤–pathå†ç”»å†…path
+		// å¯ä»¥é¡ºä¾¿æŠŠæ¯ä¸ªæ–‡ä»¶çš„viewBoxæ”¹äº†ï¼Œå¥½å±…ä¸­
 		int fileIdx = 0;
-		// »ñÈ¡<line>½Úµã
+		// è·å–<line>èŠ‚ç‚¹
 		Element svgNode = document.getRootElement(); // root -> svg
 		Element g1Node = svgNode.element("g");
 		Element g2Node = g1Node.element("g");
@@ -282,19 +282,19 @@ public class SVGProcess {
 		for (Iterator<Element> it = g2Node.elementIterator(); it.hasNext();) {
 			Element childNode = it.next();
 			if (childNode.getName() == "path") {
-				// Çé¿öÒ»£¬path½ÚµãÊôĞÔdÒÔz½áÎ²£¨±íÊ¾±Õ»·£©£¬ÔòĞèÒªViewBoxÅĞ¶ÏÊÇ·ñ·ÇĞÂÍ¼
-				// Çé¿ö¶ş£¬path½ÚµãÊôĞÔdÎŞz£¬ÔòÒ»¶¨²»ÊÇĞÂÍ¼
+				// æƒ…å†µä¸€ï¼ŒpathèŠ‚ç‚¹å±æ€§dä»¥zç»“å°¾ï¼ˆè¡¨ç¤ºé—­ç¯ï¼‰ï¼Œåˆ™éœ€è¦ViewBoxåˆ¤æ–­æ˜¯å¦éæ–°å›¾
+				// æƒ…å†µäºŒï¼ŒpathèŠ‚ç‚¹å±æ€§dæ— zï¼Œåˆ™ä¸€å®šä¸æ˜¯æ–°å›¾
 				if (childNode.attributeValue("d").endsWith(" z")) {
 					String viewBox = GetViewBoxFromPath(childNode);
 					if (preViewBox == null || (preViewBox != null && !IsSameFile(preViewBox, viewBox))) {
-						fileIdx++; // ĞÂÍ¼
+						fileIdx++; // æ–°å›¾
 						tmpFilePath = imagePath + "/temp_" + fileIdx + ".svg";
-						// ¼ÇÂ¼´ıĞŞ¸ÄµÄviewBox
+						// è®°å½•å¾…ä¿®æ”¹çš„viewBox
 						viewBoxList.add(viewBox);
 					}
-					preViewBox = viewBox; // ¸üĞÂpreViewBox
+					preViewBox = viewBox; // æ›´æ–°preViewBox
 				}
-				// <path>Ğ´ÈëÏàÓ¦svgÎÄµµ
+				// <path>å†™å…¥ç›¸åº”svgæ–‡æ¡£
 				try {
 					FileOutputStream out = new FileOutputStream(tmpFilePath, true);
 					OutputStreamWriter osw = new OutputStreamWriter(out);
@@ -310,25 +310,25 @@ public class SVGProcess {
 
 	/**
 	 * @Title: IsSameFile   
-	 * @Description: TODO   Í¨¹ıviewBoxÅĞ¶Ï£¬Ç°ºóPathÊÇ·ñÊôÓÚÍ¬Ò»ÕÅÍ¼
+	 * @Description: TODO   é€šè¿‡viewBoxåˆ¤æ–­ï¼Œå‰åPathæ˜¯å¦å±äºåŒä¸€å¼ å›¾
 	 * @param preViewBox
 	 * @param viewBox
 	 * @return: boolean
 	 */
 	private static boolean IsSameFile(String preViewBox, String viewBox) {
-		// ViewBox¸ñÊ½£ºminX, maxY, width, height
+		// ViewBoxæ ¼å¼ï¼šminX, maxY, width, height
 		double[] data = new double[8];
 		String[] temp = preViewBox.concat(" " + viewBox).split("\\s");
 		if (temp.length != 8) {
-			System.out.println("ViewBoxÇĞ·Ö³ö´í£¡");
+			System.out.println("ViewBoxåˆ‡åˆ†å‡ºé”™ï¼");
 			return false;
 		}
 		for (int i = 0; i < data.length; i++)
 			data[i] = Double.parseDouble(temp[i]);
-		// Èç¹ûpreµÄminX¸üĞ¡£¬µ«minX+width¸ü´ó£¬¾ÍÎªÍ¬Ò»¸öfile
+		// å¦‚æœpreçš„minXæ›´å°ï¼Œä½†minX+widthæ›´å¤§ï¼Œå°±ä¸ºåŒä¸€ä¸ªfile
 		if (data[0] < data[4] && (data[0] + data[2]) > (data[4] + data[6])) {
 //			if(data[1]>data[5] && (data[1]+data[3])>(data[5]+data[6]))
-			System.out.println("·ÇĞÂÍ¼£º" + data[0] + " : " + data[4]);
+			System.out.println("éæ–°å›¾ï¼š" + data[0] + " : " + data[4]);
 			return true;
 		}
 		return false;
@@ -336,7 +336,7 @@ public class SVGProcess {
 	
 	/**
 	 * @Title: UpdateNameAndViewbox   
-	 * @Description: TODO   ¸ù¾İnameListºÍviewBoxList¸üĞÂËùÓĞsvgÎÄ¼ş
+	 * @Description: TODO   æ ¹æ®nameListå’ŒviewBoxListæ›´æ–°æ‰€æœ‰svgæ–‡ä»¶
 	 * @throws DocumentException
 	 * @throws IOException      
 	 * @return: void
@@ -361,7 +361,7 @@ public class SVGProcess {
 					System.out.println("File "+i+" Rename Failure");
 			}
 			else {
-				System.out.println("ÎÄ¼şÂ·¾¶´íÎó£¡");
+				System.out.println("æ–‡ä»¶è·¯å¾„é”™è¯¯ï¼");
 				return;
 			}
 			SetViewBoxWithVB(doc, viewBoxList.get(i-1), newfilePath);

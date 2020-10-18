@@ -1,19 +1,16 @@
-package dxfFileProcess;
+package com.dxffileprocess;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.apache.batik.transcoder.TranscoderException;
-import org.kabeja.dxf.DXFDocument;
-import org.xml.sax.SAXException;
 
 public class TestMain {
 
 	public static void main(String[] args) {
 		
-		// »ñÈ¡¹¤³Ì¸ùÄ¿Â¼/image
+		// èŽ·å–å·¥ç¨‹æ ¹ç›®å½•/image
 		String imagePath = "D:\\Projects\\Project1_Convert\\NewPic";
-		// 1¡¢DXF -> SVG£¨Â·¾¶£º¹¤³ÌÂ·¾¶/images/£©
+		// 1ã€DXF -> SVGï¼ˆè·¯å¾„ï¼šå·¥ç¨‹è·¯å¾„/images/ï¼‰
 		//DXFDocument dxfDoc = DXFConvert.GetSourceFile("D:\\Projects\\Project1_Convert\\NewPic/NL-4AB-5PVC.dxf");
 		try {
 			//DXFConvert.DXF2SVG(dxfDoc, imagePath+"/CQ011312_02.svg");

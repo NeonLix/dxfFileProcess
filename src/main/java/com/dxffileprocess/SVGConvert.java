@@ -1,13 +1,10 @@
-package dxfFileProcess;
+package com.dxffileprocess;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -23,8 +20,8 @@ import org.apache.pdfbox.rendering.PDFRenderer;
 public class SVGConvert {
 	/**
 	 * @Title: SVG2PDF
-	 * @Description: TODO SVG -> PDF -> JPG£¬ÇåÎú
-	 * @param filePath ÊäÈësvgÎÄ¼şÂ·¾¶x:/xxx (Êä³öµ½Í¬Ò»ÎÄ¼ş¼Ğ)
+	 * @Description: TODO SVG -> PDF -> JPGï¼Œæ¸…æ™°
+	 * @param filePath è¾“å…¥svgæ–‡ä»¶è·¯å¾„x:/xxx (è¾“å‡ºåˆ°åŒä¸€æ–‡ä»¶å¤¹)
 	 * @return: void
 	 * @throws IOException
 	 * @throws TranscoderException
@@ -35,7 +32,7 @@ public class SVGConvert {
 			String svgPath = filePath + "/";
 			String pdfPath = filePath + "/pdfImages/";
 			String jpgPath = filePath + "/jpgImages/";
-			// ´´½¨Â·¾¶ÎÄ¼ş¼Ğ
+			// åˆ›å»ºè·¯å¾„æ–‡ä»¶å¤¹
 			CreateFilePath(pdfPath);
 //			System.out.println("pdfPath:" + pdfPath);
 			CreateFilePath(jpgPath);
@@ -48,7 +45,7 @@ public class SVGConvert {
 			// pdf -> jpg
 			PDDocument pdfDoc = PDDocument.load(new File(pdfPath + nameList.get(i) + ".pdf"));
 			PDFRenderer renderer = new PDFRenderer(pdfDoc);
-			// µÚ¶ş¸ö²ÎÊıÔ½´óÉú³ÉÍ¼Æ¬·Ö±æÂÊÔ½¸ß£¬×ª»»Ê±¼äÒ²¾ÍÔ½³¤£¬25Ô¼1M
+			// ç¬¬äºŒä¸ªå‚æ•°è¶Šå¤§ç”Ÿæˆå›¾ç‰‡åˆ†è¾¨ç‡è¶Šé«˜ï¼Œè½¬æ¢æ—¶é—´ä¹Ÿå°±è¶Šé•¿ï¼Œ25çº¦1M
 			BufferedImage image = renderer.renderImage(0, 25.0f); 
 			ImageIO.write(image, "JPG", new File(jpgPath + nameList.get(i) + ".jpg"));
 			System.out.println("File " + (i + 1) + " SVG to JPG Done");
@@ -64,10 +61,10 @@ public class SVGConvert {
 
 	/**
 	 * @Title: SVG2JPG   
-	 * @Description: TODO   µ¥ÕÅSVG -> JPG
-	 * @param filePath svgÎÄ¼şÂ·¾¶
-	 * @param outFilePath Êä³öjpgÎÄ¼şÂ·¾¶
-	 * @param resolution Êä³öjpgÇåÎú¶È£¨25.0fÔ¼1M£©
+	 * @Description: TODO   å•å¼ SVG -> JPG
+	 * @param filePath svgæ–‡ä»¶è·¯å¾„
+	 * @param outFilePath è¾“å‡ºjpgæ–‡ä»¶è·¯å¾„
+	 * @param resolution è¾“å‡ºjpgæ¸…æ™°åº¦ï¼ˆ25.0fçº¦1Mï¼‰
 	 * @throws IOException
 	 * @throws TranscoderException      
 	 * @return: void
@@ -83,7 +80,7 @@ public class SVGConvert {
 		// pdf -> jpg
 		PDDocument pdfDoc = PDDocument.load(new File(pdfFilePath));
 		PDFRenderer renderer = new PDFRenderer(pdfDoc);
-		BufferedImage image = renderer.renderImage(0, resolution); // µÚ¶ş¸ö²ÎÊıÔ½´óÉú³ÉÍ¼Æ¬·Ö±æÂÊÔ½¸ß£¬×ª»»Ê±¼äÒ²¾ÍÔ½³¤
+		BufferedImage image = renderer.renderImage(0, resolution); // ç¬¬äºŒä¸ªå‚æ•°è¶Šå¤§ç”Ÿæˆå›¾ç‰‡åˆ†è¾¨ç‡è¶Šé«˜ï¼Œè½¬æ¢æ—¶é—´ä¹Ÿå°±è¶Šé•¿
 		ImageIO.write(image, "JPG", new File(outFilePath));
 		System.out.println("SVG to JPG Done");
 		pdfDoc.close();
