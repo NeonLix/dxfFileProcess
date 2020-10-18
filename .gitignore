@@ -4,3 +4,4 @@
 .settings/
 DFX2JPG.iml
 bin/
+/target/
